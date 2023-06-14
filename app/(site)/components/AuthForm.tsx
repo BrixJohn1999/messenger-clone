@@ -8,7 +8,7 @@ import { useForm, FieldValues, SubmitHandler } from "react-hook-form";
 import AuthSocialButton from "./AuthSocialButton";
 import { BsGithub, BsGoogle } from "react-icons/bs";
 import { toast } from "react-hot-toast";
-import { signIn} from 'next-auth/react'
+import { signIn } from "next-auth/react";
 type variant = "LOGIN" | "REGISTER";
 
 const AuthForm = () => {
@@ -40,27 +40,28 @@ const AuthForm = () => {
 
     if (variant === "REGISTER") {
       //axios register
-      axios.post('/api/register', data)
-      .catch(() => toast.error('Something went wrong!'))
+      axios
+        .post("/api/register", data)
+        .catch(() => toast.error("Something went wrong!"))
 
-      //to prevent disbale the button and input form 
-      .finally(() => setisLoading(false))
+        //to prevent disbale the button and input form
+        .finally(() => setisLoading(false));
     }
 
     if (variant == "LOGIN") {
       //next auth signin
-      signIn('credentials', {
+      signIn("credentials", {
         ...data,
-        redirect: false
-      })
-      .then((callback) => {
-        if(callback?.error){
-          toast.error('Invalid Credentials')
+        redirect: false,
+      }).then((callback) => {
+        if (callback?.error) {
+          toast.error("Invalid Credentials");
+          setisLoading(false);
         }
-        if(callback?.ok && !callback?.error){
-          toast.success('Successfully Login')
+        if (callback?.ok && !callback?.error) {
+          toast.success("Successfully Login");
         }
-      } ) 
+      });
     }
   };
 
@@ -68,6 +69,16 @@ const AuthForm = () => {
     setisLoading(true);
 
     //nextauth social signin
+    signIn(action, { redirect: false })
+      .then((callback) => {
+        if (callback?.error) {
+          toast.error("Invalid Credentials");
+        }
+        if (callback?.ok && !callback?.error) {
+          toast.success("Successfully Login");
+        }
+      })
+      .finally(() => setisLoading(false));
   };
 
   return (
