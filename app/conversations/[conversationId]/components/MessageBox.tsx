@@ -65,6 +65,8 @@ const MessageBox: React.FC<MessageBoxProps> = ({ data, isLast }) => {
             <div>{data.body}</div>
           )}
         </div>
+
+        {/* display if the message was seen by the user */}
         {isLast && isOwn && seenList.length > 0 && (
           <div
             className="
